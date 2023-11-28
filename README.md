@@ -5,7 +5,7 @@ EAN13 barcode generator.
 ## Technologies
 
 - [Streamlit](https://streamlit.io/) - Visualization of the results.
-- [Streamlit](OpenCV) - EAN13 code generation.
+- [OpenCV](https://docs.opencv.org/4.8.0/) - EAN13 code generation.
 
 ## Instalation
 
