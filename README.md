@@ -27,3 +27,9 @@ poetry shell
 ```bash
 streamlit run src/__main__.py
 ```
+
+## Tasks
+```bash
+task formatting  # to format code and sort imports
+task mypy        # to check hard typing
+```
