@@ -25,6 +25,5 @@ poetry shell
 ## Run project
 
 ```bash
-python3 -m src
-streamlit run your_script.py
+streamlit run src/__main__.py
 ```
