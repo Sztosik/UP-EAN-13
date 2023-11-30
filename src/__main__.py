@@ -94,6 +94,8 @@ CODING_SETS = {
     "9": (A, B, B, A, B, A),
 }
 
+offset = 50
+
 
 def calc_crc(number: list[str]) -> str:
     S = 0
@@ -115,14 +117,8 @@ def split_into_digits(text_code: str) -> list[str]:
     return [letter for letter in text_code]
 
 
-def draw_ean_barcode(digits: list[str], img: Any) -> None:
-    if len(digits) != 12:
-        raise ValueError
-
-    coding_set = CODING_SETS[digits[0]]
-
-    offset = 50
-
+def draw_start_code(img: Any) -> None:
+    global offset
     cv.line(
         img,
         Point(offset, 10).to_tuple(),
@@ -147,6 +143,13 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
         MODULE_WIDTH_PX,
     )
     offset += MODULE_WIDTH_PX
+
+
+def draw_ean_barcode(digits: list[str], img: Any) -> None:
+    global offset
+    coding_set = CODING_SETS[digits[0]]
+
+    draw_start_code(img)
 
     for index, dgt in enumerate(digits[1:7]):
         for module in coding_set[index][dgt]:
@@ -221,32 +224,7 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
             )
             offset += MODULE_WIDTH_PX
 
-    cv.line(
-        img,
-        Point(offset, 10).to_tuple(),
-        Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
-        BLACK,
-        MODULE_WIDTH_PX,
-        cv.LINE_AA,
-    )
-    offset += MODULE_WIDTH_PX
-    cv.line(
-        img,
-        Point(offset, 10).to_tuple(),
-        Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
-        WHITE,
-        MODULE_WIDTH_PX,
-        cv.LINE_AA,
-    )
-    offset += MODULE_WIDTH_PX
-    cv.line(
-        img,
-        Point(offset, 10).to_tuple(),
-        Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
-        BLACK,
-        MODULE_WIDTH_PX,
-        cv.LINE_AA,
-    )
+    draw_start_code(img)
 
 
 # Create a white image
