@@ -95,7 +95,7 @@ CODING_SETS = {
 }
 
 
-def calc_crc(number: list[str]) -> int:
+def calc_crc(number: list[str]) -> str:
     S = 0
 
     for index, num in enumerate(number):
@@ -105,7 +105,7 @@ def calc_crc(number: list[str]) -> int:
             S += int(num)
 
     c = 10 - (S % 10)
-    return c
+    return str(c)
 
 
 def split_into_digits(text_code: str) -> list[str]:
@@ -123,7 +123,15 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
 
     offset = 50
 
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+
     for index, dgt in enumerate(digits[1:7]):
+        print(dgt)
         for module in coding_set[index][dgt]:
             color = WHITE
             if module:
@@ -138,6 +146,42 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
             )
             offset += MODULE_WIDTH_PX
 
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+
+    digits.append(calc_crc(digits))
+
+    print(" ")
+
+    for dgt in digits[7:]:
+        print(dgt)
+        for module in C[dgt]:
+            color = WHITE
+            if module:
+                color = BLACK
+            
+            cv.line(
+                img,
+                Point(offset, 10).to_tuple(),
+                Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
+                color,
+                MODULE_WIDTH_PX,
+            )
+            offset += MODULE_WIDTH_PX
+
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    offset += MODULE_WIDTH_PX
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
 
 # Create a white image
 img = np.zeros((IMG_HEIGHT_PX, IMG_WIDTH_PX, 3), np.uint8)
