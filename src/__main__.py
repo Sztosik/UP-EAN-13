@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any
 
 import cv2 as cv
 import numpy as np
@@ -26,6 +27,8 @@ IMG_HEIGHT_PX = 256
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+
+MODULE_WIDTH_PX = 2
 
 EAN13_SAVE_PATH = "./ean_barcodes_img/ean13.png"
 
@@ -78,7 +81,7 @@ C = {
     "9": (1, 1, 1, 0, 1, 0, 0),
 }
 
-coding_set = {
+CODING_SETS = {
     "0": (A, A, A, A, A, A),
     "1": (A, A, B, A, B, B),
     "2": (A, A, B, B, A, B),
@@ -111,10 +114,22 @@ def split_into_digits(text_code: str) -> list[str]:
     return [letter for letter in text_code]
 
 
-def draw_ean_barcode(digits: list[int]):
+def draw_ean_barcode(digits: list[str], img: Any) -> None:
     if len(digits) != 12:
         raise ValueError
-    pass
+
+    coding_set = CODING_SETS[digits[0]]
+
+    offset = 50
+
+    for index, dgt in enumerate(digits[1:7]):
+        for module in coding_set[index][dgt]:
+            color = WHITE
+            if module:
+                color = BLACK
+
+            cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX-10).to_tuple(), color, MODULE_WIDTH_PX)
+            offset += MODULE_WIDTH_PX
 
 
 # Create a white image
@@ -122,8 +137,7 @@ img = np.zeros((IMG_HEIGHT_PX, IMG_WIDTH_PX, 3), np.uint8)
 img.fill(255)
 
 # Draw a black line with thickness of 5 px
-cv.line(img, Point(x=50, y=10).to_tuple(), Point(x=50, y=246).to_tuple(), BLACK, 5)
-cv.imwrite(EAN13_SAVE_PATH, img)
+#cv.line(img, Point(x=50, y=10).to_tuple(), Point(x=50, y=246).to_tuple(), BLACK, 5)
 
 with st.container():
     st.subheader("Urządzenia Peryferyjne")
@@ -134,6 +148,9 @@ with st.container():
     try:
         digits = split_into_digits(text_code)
         print(digits)
+
+        draw_ean_barcode(digits, img)
+        cv.imwrite(EAN13_SAVE_PATH, img)
     except ValueError:
         pass
 
