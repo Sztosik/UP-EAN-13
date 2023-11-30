@@ -91,8 +91,9 @@ CODING_SETS = {
     "6": (A, B, B, B, A, A),
     "7": (A, B, A, B, A, B),
     "8": (A, B, A, B, B, A),
-    "9": (A, B, B, A, B, A)
+    "9": (A, B, B, A, B, A),
 }
+
 
 def calc_crc(number: list[str]) -> int:
     S = 0
@@ -128,7 +129,13 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
             if module:
                 color = BLACK
 
-            cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX-10).to_tuple(), color, MODULE_WIDTH_PX)
+            cv.line(
+                img,
+                Point(offset, 10).to_tuple(),
+                Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
+                color,
+                MODULE_WIDTH_PX,
+            )
             offset += MODULE_WIDTH_PX
 
 
@@ -137,7 +144,7 @@ img = np.zeros((IMG_HEIGHT_PX, IMG_WIDTH_PX, 3), np.uint8)
 img.fill(255)
 
 # Draw a black line with thickness of 5 px
-#cv.line(img, Point(x=50, y=10).to_tuple(), Point(x=50, y=246).to_tuple(), BLACK, 5)
+# cv.line(img, Point(x=50, y=10).to_tuple(), Point(x=50, y=246).to_tuple(), BLACK, 5)
 
 with st.container():
     st.subheader("Urządzenia Peryferyjne")
@@ -147,24 +154,22 @@ with st.container():
 
     try:
         digits = split_into_digits(text_code)
-        print(digits)
 
         draw_ean_barcode(digits, img)
         cv.imwrite(EAN13_SAVE_PATH, img)
+
+        col1, col2, col3 = st.columns(3)
+        with col2:
+            # display image
+            st.image("./ean_barcodes_img/ean13.png")
+
+            # display download button
+            with open("./ean_barcodes_img/ean13.png", "rb") as file:
+                st.download_button(
+                    label="Pobierz",
+                    data=file,
+                    file_name="./ean_barcodes_img/ean13.png",
+                    mime="image/png",
+                )
     except ValueError:
         pass
-
-
-col1, col2, col3 = st.columns(3)
-with col2:
-    # display image
-    st.image("./ean_barcodes_img/example.png")
-
-    # display download button
-    with open("./ean_barcodes_img/example.png", "rb") as file:
-        st.download_button(
-            label="Pobierz",
-            data=file,
-            file_name="./ean_barcodes_img/example.png",
-            mime="image/png",
-        )
