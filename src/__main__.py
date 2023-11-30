@@ -28,7 +28,7 @@ IMG_HEIGHT_PX = 256
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-MODULE_WIDTH_PX = 2
+MODULE_WIDTH_PX = 4
 
 EAN13_SAVE_PATH = "./ean_barcodes_img/ean13.png"
 
@@ -123,11 +123,11 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
 
     offset = 50
 
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), WHITE, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
 
     for index, dgt in enumerate(digits[1:7]):
@@ -140,21 +140,21 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
             cv.line(
                 img,
                 Point(offset, 10).to_tuple(),
-                Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
+                Point(offset, IMG_HEIGHT_PX - 20).to_tuple(),
                 color,
                 MODULE_WIDTH_PX,
             )
             offset += MODULE_WIDTH_PX
 
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), WHITE, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), WHITE, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), WHITE, MODULE_WIDTH_PX)
     offset += MODULE_WIDTH_PX
 
     digits.append(calc_crc(digits))
@@ -171,17 +171,17 @@ def draw_ean_barcode(digits: list[str], img: Any) -> None:
             cv.line(
                 img,
                 Point(offset, 10).to_tuple(),
-                Point(offset, IMG_HEIGHT_PX - 10).to_tuple(),
+                Point(offset, IMG_HEIGHT_PX - 20).to_tuple(),
                 color,
                 MODULE_WIDTH_PX,
             )
             offset += MODULE_WIDTH_PX
 
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX, cv.LINE_AA)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), WHITE, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), WHITE, MODULE_WIDTH_PX, cv.LINE_AA)
     offset += MODULE_WIDTH_PX
-    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX).to_tuple(), BLACK, MODULE_WIDTH_PX)
+    cv.line(img, Point(offset, 10).to_tuple(), Point(offset, IMG_HEIGHT_PX - 10).to_tuple(), BLACK, MODULE_WIDTH_PX, cv.LINE_AA)
 
 # Create a white image
 img = np.zeros((IMG_HEIGHT_PX, IMG_WIDTH_PX, 3), np.uint8)
