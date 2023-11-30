@@ -84,15 +84,19 @@ def calc_crc(number: list[str]) -> int:
 
     for index, num in enumerate(number):
         if index % 2 == 1:
-            S += (int(num) * 3)
+            S += int(num) * 3
         else:
             S += int(num)
 
     c = 10 - (S % 10)
     return c
 
-def split_into_digits() -> list[int]:
-    pass
+
+def split_into_digits(text_code: str) -> list[str]:
+    if len(text_code) != 12:
+        raise ValueError
+
+    return [letter for letter in text_code]
 
 
 def draw_ean_barcode(digits: list[int]):
@@ -112,7 +116,15 @@ cv.imwrite(EAN13_SAVE_PATH, img)
 with st.container():
     st.subheader("Urządzenia Peryferyjne")
     st.title("Generator kodów EAN-13")
-    st.number_input("", min_value=0, max_value=999_999_999_999, step=1)
+
+    text_code = st.text_input("Wprowadź kod", max_chars=12)
+
+    try:
+        digits = split_into_digits(text_code)
+        print(digits)
+    except ValueError:
+        pass
+
 
 col1, col2, col3 = st.columns(3)
 with col2:
