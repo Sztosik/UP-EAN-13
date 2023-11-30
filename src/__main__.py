@@ -79,9 +79,17 @@ C = {
 }
 
 
-def calc_crc() -> int:
-    pass
+def calc_crc(number: list[str]) -> int:
+    S = 0
 
+    for index, num in enumerate(number):
+        if index % 2 == 1:
+            S += (int(num) * 3)
+        else:
+            S += int(num)
+
+    c = 10 - (S % 10)
+    return c
 
 def split_into_digits() -> list[int]:
     pass
